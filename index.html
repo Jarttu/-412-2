@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <div class="splash-container">
+    <div class="splash-container" id="splash-container">
         
         <form class="splash-content" id="goalform">
             <label for="goalinput"><h3 class="splash-header">Aseta Tavoitepisteet</h3>( Oletus 100 )</label>
@@ -19,14 +19,16 @@
 
     <div class="splash-2" id="splash2">
 
-        <form class="splash-content-2" id="playerform">
-            <label for="playerinput"><h3 class="splash-header">Lisää Pelaajien määrä:</h3>( min 2 )</label>
-            <input type="number" id="playerinput" placeholder="Pelaajien määrä">
+        <form class="splash-content-2" id="playercountform">
+            <label for="playercountinput"><h3 class="splash-header">Lisää Pelaajien määrä:</h3>( Oletus 2 max 10 )</label>
+            <input type="number" id="playercountinput" placeholder="Pelaajien määrä">
             <button type="submit" value="Add" class="click">Lisää</button>
         </form>
 
-        <form class="nameform" id="playernames">
+        <form class="nameform" id="nameform">
 
+
+            <button id="start" onclick="splash2FadeOut()">Aloita peli</button>
         </form>
     </div>
 
