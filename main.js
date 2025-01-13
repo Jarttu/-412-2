@@ -1,5 +1,6 @@
 let goalPoints = 100;
 let playerCount = 2;
+let players = [];
 
 document.addEventListener("DOMContentLoaded", function(){
     const splashContainer = document.getElementById("splash-container");
@@ -10,6 +11,7 @@ document.addEventListener("DOMContentLoaded", function(){
     const playerCountForm = document.getElementById("playercountform");
     const playerCountInput = document.getElementById("playercountinput");
     const nameForm = document.getElementById("nameform");
+    const playerNameInputs = document.getElementById("playernameinputs")
 
     const gameContent = document.getElementById("game-content");
 
@@ -22,8 +24,10 @@ document.addEventListener("DOMContentLoaded", function(){
 
     function nameFormIn(){
         playerCountForm.classList.add('hidden');
+        genNameInputs();
         setTimeout(function(){
             nameForm.classList.add('visible');
+            
         }, 500);
     }
 
@@ -33,6 +37,33 @@ document.addEventListener("DOMContentLoaded", function(){
         setTimeout(function(){
             gameContent.classList.add('visible');
         }, 500);
+    }
+
+    function genNameInputs(){
+        playerNameInputs.innerHTML("")
+        for(let i = 1; i <= playerCount; i++){
+            const input = document.createElement("input")
+            input.type = "text"
+            input.placeholder = `Pelaajan ${i} nimi`
+            input.id = `player${i}name`
+            input.classList.add("player-name-input")
+            playerNameInputs.appendChild(input)
+        }
+        const startButton = document.createElement("button")
+        startButton.textContent = "Aloita peli"
+        startButton.onclick = startGame
+        playerNameInputs.appendChild(startButton)
+    }
+
+    function startGame(){
+        players = []
+        for(let i = 1; i <= playerCount; i++){
+            const playerName = document.getElementById(`player${i}name`).value.trim()
+            if (playerName){
+                players.push({id : `p${i}`, name : playerName})
+            }
+        }
+        splash2FadeOut()
     }
 
     goalForm.addEventListener("submit", function(event){
@@ -76,5 +107,6 @@ document.addEventListener("DOMContentLoaded", function(){
             }
         }
     });
+
 });
 
