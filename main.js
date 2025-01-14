@@ -1,6 +1,9 @@
+let rollsThisRound = 0;
+let currentPlayer = 1;
 let goalPoints = 100;
 let playerCount = 2;
 let players = [];
+let roundWon = false;
 
 document.addEventListener("DOMContentLoaded", function(){
     const splashContainer = document.getElementById("splash-container");
@@ -13,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function(){
     const nameForm = document.getElementById("nameform");
     const playerNameInputs = document.getElementById("playernameinputs")
 
-    const gameContent = document.getElementById("game-content");
+    const gameContent = document.getElementById("gamecontent");
 
     function splashFadeOut(){
         splashContainer.classList.add('hidden');
@@ -32,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     function splash2FadeOut(){
-        splash2.classList.remove('acvtive');
+        splash2.classList.remove('active');
         nameForm.classList.remove('visible');
         setTimeout(function(){
             gameContent.classList.add('visible');
@@ -40,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function(){
     }
 
     function genNameInputs(){
-        playerNameInputs.innerHTML("")
+        playerNameInputs.innerHTML = ""
         for(let i = 1; i <= playerCount; i++){
             const input = document.createElement("input")
             input.type = "text"
@@ -51,7 +54,9 @@ document.addEventListener("DOMContentLoaded", function(){
         }
         const startButton = document.createElement("button")
         startButton.textContent = "Aloita peli"
+        startButton.type = "button"
         startButton.onclick = startGame
+        startButton.classList.add('click')
         playerNameInputs.appendChild(startButton)
     }
 
@@ -64,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function(){
             }
         }
         splash2FadeOut()
+        displaydefault()
     }
 
     goalForm.addEventListener("submit", function(event){
@@ -110,3 +116,16 @@ document.addEventListener("DOMContentLoaded", function(){
 
 });
 
+
+function displaydefault(){
+    const firstRandomNum = Math.floor(Math.random() * 6) + 1;
+    const firstDiceImage = "images/dice" +  firstRandomNum + ".png";
+    
+    const firstRandomNum2 = Math.floor(Math.random() * 6) + 1;
+    const firstDiceImage2 = "images/dice" +  firstRandomNum2 + ".png";
+
+    document.getElementById("dice-container-1").setAttribute("src", firstDiceImage)
+    document.getElementById("dice-container-2").setAttribute("src", firstDiceImage2)
+
+    document.getElementById("goaltext").textContent = `Tavoite ${goalPoints}`
+}
