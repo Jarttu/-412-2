@@ -40,19 +40,15 @@
             <p id="goaltext">
 
             </p>
-            <div>
+            <div class="dice-container">
                 <img id="dice-container-1"/>
 
             </div>
 
-            <div>
+            <div class="dice-container">
                 <img id="dice-container-2" />
 
             </div>
-
-            <p id="displayplayers">
-
-            </p>
 
         </div>
 
@@ -66,18 +62,14 @@
 
             </p>
 
-            <p >
-
-            </p>
+            
         </div>
 
-        <div>
-            <h4>Kokonaispisteet</h4>
-            <div id="pointstotal-container">
-
-            </div>
+        <div id="buttons-container">
+            <button id="rollbtn" onclick="rollDice()">Heitä</button><br><br>
+            <button id="restartbtn" onclick="location.reload()">Pelaa uudestaan</button>
+            <button id="stopturnbtn" onclick="stopTurn()">Lopeta vuoro</button>
         </div>
-
 
     </div>
     <script src="main.js"></script>

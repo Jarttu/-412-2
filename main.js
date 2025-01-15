@@ -1,9 +1,13 @@
 let rollsThisRound = 0;
-let currentPlayer = 1;
 let goalPoints = 100;
 let playerCount = 2;
 let players = [];
-let roundWon = false;
+let currentPlayerI = 0;
+
+var restartbtn = document.getElementById("restartbtn")
+var rollbtn = document.getElementById("rollbtn")
+
+restartbtn.setAttribute("disabled", " ")
 
 document.addEventListener("DOMContentLoaded", function(){
     const splashContainer = document.getElementById("splash-container");
@@ -39,6 +43,9 @@ document.addEventListener("DOMContentLoaded", function(){
         nameForm.classList.remove('visible');
         setTimeout(function(){
             gameContent.classList.add('visible');
+            displayFirstDice()
+            updateCurrentPlayerDisplay()
+            displayPoints()
         }, 500);
     }
 
@@ -65,11 +72,10 @@ document.addEventListener("DOMContentLoaded", function(){
         for(let i = 1; i <= playerCount; i++){
             const playerName = document.getElementById(`player${i}name`).value.trim()
             if (playerName){
-                players.push({id : `p${i}`, name : playerName})
+                players.push({id : `p${i}`, name : playerName, points: 0, currentroundpoints: 0})
             }
         }
         splash2FadeOut()
-        displaydefault()
     }
 
     goalForm.addEventListener("submit", function(event){
@@ -116,16 +122,104 @@ document.addEventListener("DOMContentLoaded", function(){
 
 });
 
+let diceImgcontainer1 = document.getElementById("dice-container-1")
+let diceImgcontainer2 = document.getElementById("dice-container-2")
 
-function displaydefault(){
+function nextPlayer(){
+    rollsThisRound = 0
+    currentPlayerI = (currentPlayerI + 1) % players.length;
+    updateCurrentPlayerDisplay()
+};
+
+function updateCurrentPlayerDisplay(){
+    const currentPlayer = players[currentPlayerI]
+    document.getElementById("playerturn").textContent = `Pelaajan vuoro: ${currentPlayer.name}`
+}
+
+function displayFirstDice(){
     const firstRandomNum = Math.floor(Math.random() * 6) + 1;
     const firstDiceImage = "images/dice" +  firstRandomNum + ".png";
     
     const firstRandomNum2 = Math.floor(Math.random() * 6) + 1;
     const firstDiceImage2 = "images/dice" +  firstRandomNum2 + ".png";
+    
+    diceImgcontainer1.src = firstDiceImage
+    diceImgcontainer2.src = firstDiceImage2
+}
 
-    document.getElementById("dice-container-1").setAttribute("src", firstDiceImage)
-    document.getElementById("dice-container-2").setAttribute("src", firstDiceImage2)
+function displayPoints(){
+    document.getElementById("rolls").textContent = `Heitot: ${rollsThisRound}`
+    const pointsContainer = document.getElementById('points-container') || document.createElement("div")
+    pointsContainer.id = "points-container"
+    pointsContainer.innerHTML = ""
+    players.forEach(player => {
+        const playerPoints = document.createElement("div")
+        playerPoints.id = `points-${player.id}`
+        playerPoints.textContent = `${player.name}: ${player.points} pistettä (Pisteet tässä kierroksessa: ${player.currentroundpoints})`
+        pointsContainer.appendChild(playerPoints)
+    });
+    document.getElementById("gamecontent").appendChild(pointsContainer);
+}
 
-    document.getElementById("goaltext").textContent = `Tavoite ${goalPoints}`
+const currentPlayer = [currentPlayerI]
+
+function rollDice(){
+    rollsThisRound += 1
+    let doublesIndex = 0
+    const randomNum1 = Math.floor(Math.random() * 6) + 1;
+    const diceImg1 = "images/dice" + randomNum1 + ".png"
+    const randomNum2 = Math.floor(Math.random() * 6) + 1;
+    const diceImg2 = "images/dice" + randomNum2 + ".png"
+
+    let doubles = (randomNum1 + randomNum2) * 2;
+    let number = randomNum1 + randomNum2
+
+    diceImgcontainer1.src = diceImg1
+    diceImgcontainer2.src = diceImg2
+    
+    
+
+    if(randomNum1 > 1 && randomNum2 == 1 || randomNum1 == 1 && randomNum2 > 1){
+        currentPlayer.points -= currentPlayer.currentroundpoints
+        currentPlayer.currentroundpoints == 0
+        nextPlayer()
+
+    } else if (randomNum1 == randomNum2){
+        doublesIndex += 1
+        currentPlayer.points += doubles
+        currentPlayer.currentroundpoints += doubles
+
+        if (doublesIndex == 3){
+            doublesIndex = 0
+            currentPlayer.points -= currentPlayer.currentroundpoints
+            currentPlayer.currentroundpoints = 0
+            nextPlayer()
+
+        }
+
+    } else if(randomNum1 == 1 && randomNum2 == 1){
+        currentPlayer.points += 25
+        currentPlayer.currentroundpoints += 25
+        displayPoints()
+
+    } else if(currentPlayer.points >= goalPoints){
+        
+        document.getElementById("result").textContent = `${currentPlayer.name} Voitti!`
+        buttons()
+    } else {
+        currentPlayer.points += number
+        currentPlayer.currentroundpoints += number
+    }
+    displayPoints()
+    
+};
+
+function stopTurn(){
+    currentPlayer.currentroundpoints = 0
+    nextPlayer()
+}
+
+function buttons(){
+    rollbtn.setAttribute("disabled", " ")
+    restartbtn.removeAttribute("disabled")
 }

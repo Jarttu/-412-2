@@ -132,3 +132,12 @@ body {
     display: block;
 }
 /*splash2-end*/
+
+.dice-container{
+    display: flex;
+    text-align: center;
+    margin: 0px 50px;
+}
+img{
+    width: 320px;
+}
