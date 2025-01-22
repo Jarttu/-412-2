@@ -161,7 +161,7 @@ function displayPoints(){
     document.getElementById("gamecontent").appendChild(pointsContainer);
 }
 
-const currentPlayer = [currentPlayerI]
+
 
 function rollDice(){
     rollsThisRound += 1
@@ -177,11 +177,13 @@ function rollDice(){
     diceImgcontainer1.src = diceImg1
     diceImgcontainer2.src = diceImg2
     
-    
+    const currentPlayer = players[currentPlayerI]
 
-    if(randomNum1 > 1 && randomNum2 == 1 || randomNum1 == 1 && randomNum2 > 1){
+    
+    if((randomNum1 > 1 && randomNum2 === 1) || (randomNum1 === 1 && randomNum2 > 1)){
         currentPlayer.points -= currentPlayer.currentroundpoints
-        currentPlayer.currentroundpoints == 0
+        currentPlayer.points = Math.max(0, currentPlayer.points)
+        currentPlayer.currentroundpoints = 0
         nextPlayer()
 
     } else if (randomNum1 == randomNum2){
@@ -189,9 +191,10 @@ function rollDice(){
         currentPlayer.points += doubles
         currentPlayer.currentroundpoints += doubles
 
-        if (doublesIndex == 3){
+        if (doublesIndex === 3){
             doublesIndex = 0
             currentPlayer.points -= currentPlayer.currentroundpoints
+            currentPlayer.points = Math.max(0, currentPlayer.points);
             currentPlayer.currentroundpoints = 0
             nextPlayer()
 
@@ -202,24 +205,30 @@ function rollDice(){
         currentPlayer.currentroundpoints += 25
         displayPoints()
 
-    } else if(currentPlayer.points >= goalPoints){
-        
-        document.getElementById("result").textContent = `${currentPlayer.name} Voitti!`
-        buttons()
     } else {
         currentPlayer.points += number
         currentPlayer.currentroundpoints += number
+    }
+
+    if(currentPlayer.points >= goalPoints){
+        
+        document.getElementById("result").textContent = `${currentPlayer.name} Voitti!`
+        buttons()
+        return
     }
     displayPoints()
     
 };
 
 function stopTurn(){
+    const currentPlayer = players[currentPlayerI]
     currentPlayer.currentroundpoints = 0
     nextPlayer()
+    displayPoints()
 }
 
 function buttons(){
+    displayPoints()
     rollbtn.setAttribute("disabled", " ")
     restartbtn.removeAttribute("disabled")
 }
